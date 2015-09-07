@@ -12,7 +12,8 @@ $delnum=($_POST['delnum']);
 
 if (empty($add) and empty($rednum) and empty($red) and empty($delnum))
 {	
-	exit("<br>Вы не заполнили поля.<br><a href='page_99.php'>Вернуться назад</a>");
+	exit ("<br><center><font size='4' color='red'>¬се пол¤ пустые.</font></center>
+					<html><head><meta http-equiv='Refresh' content='1; URL=page_99.php'></head></html>");
 }
 
 
@@ -33,41 +34,81 @@ if ($_POST['spisok']==2)
 
 }
 
-//чек одинаковые записи
+
 if (!empty($add))
 {
-	
-	$result=mysql_query ("INSERT INTO $from ($per) VALUES ('$add')") or die(mysql_error());
-	if($result=='TRUE')
-	{
-		echo "Запись успешно добавлена.<br><a href='page_99.php'>Вернуться назад</a>";	
-	}
-}
-
-
-if (!empty($rednum) and !empty($red))
-{
-	
-	$result=mysql_query ("UPDATE $from SET $per='$red' WHERE $id='$rednum'")  or die(mysql_error());
-	if($result=='TRUE')
-	{
-		echo "Запись успешно изменена.<br><a href='page_99.php'>Вернуться назад</a>";
-	}
-}
-
-if (!empty($delnum))
-{
-	
-	$result2=mysql_query ("DELETE FROM $from WHERE $id = '$delnum' ") or die(mysql_error());
-	if(mysql_affected_rows($result2)==1)
-	{
-		echo "Запись успешно удалена.<br><a href='page_99.php'>Вернуться назад</a>";
+	$result1 = mysql_query("SELECT * FROM $from WHERE $per='$add' ") or die(mysql_error());
+	if(mysql_num_rows($result1)) 
+	{//одинаковые записи
+		exit ("<br><center><font size='4' color='red'>“ака¤ запись уже существует.</font></center>
+					<html><head><meta http-equiv='Refresh' content='1; URL=page_99.php'></head></html>");
 	}
 	else
 	{
-		echo "Введенные данные не верны.<br><a href='page_99.php'>Вернуться назад</a>";
+		
+	
+	$result2=mysql_query ("INSERT INTO $from ($per) VALUES ('$add')") or die(mysql_error());
+	if($result2=='TRUE')
+	 {	
+		exit ("<br><center><font size='4' color='red'>«апись успешно добавлена.</font></center>
+					<html><head><meta http-equiv='Refresh' content='1; URL=page_99.php'></head></html>");
+	 }
+	
 	}
 }
-                
-				
+
+
+
+
+if (!empty($delnum))
+{
+	$result1 = mysql_query("SELECT * FROM $from WHERE $id='$delnum' ") or die(mysql_error());
+	if(!mysql_num_rows($result1)) 
+	{//существование номера
+		exit ("<br><center><font size='4' color='red'>¬веденный номер неверный.</font></center>
+				<html><head><meta http-equiv='Refresh' content='1; URL=page_99.php'></head></html>");	
+	}
+	else
+	{
+		$result2=mysql_query("DELETE FROM $from WHERE $id = '$delnum' ") or die(mysql_error());
+			exit ("<br><center><font size='4' color='red'>«апись успешно удалена.</font></center>
+					<html><head><meta http-equiv='Refresh' content='1; URL=page_99.php'></head></html>");
+
+	}
+}
+
+if ( (empty($rednum) or empty($red)) & (empty($rednum) or empty($red)) )
+{
+	//если есть одно поле,то и второе должно быть
+	exit ("<br><center><font size='4' color='red'>Ќе все пол¤ дл¤ редактировани¤ заполнены.</font></center>
+					<html><head><meta http-equiv='Refresh' content='1; URL=page_99.php'></head></html>");
+}
+					
+else
+{ 
+	$result1 = mysql_query("SELECT * FROM $from WHERE $id='$rednum' ") or die(mysql_error());
+	if(!mysql_num_rows($result1)) 
+	{//существование номера
+		exit ("<br><center><font size='4' color='red'>¬веденный номер неверный.</font></center>
+				<html><head><meta http-equiv='Refresh' content='1; URL=page_99.php'></head></html>");	
+	}
+
+	$result2 = mysql_query("SELECT * FROM $from WHERE $per='$red' ") or die(mysql_error());
+	if(mysql_num_rows($result2)) 
+	{//одинаковые записи
+		exit ("<br><center><font size='4' color='red'>“ака¤ запись уже существует.</font></center>
+					<html><head><meta http-equiv='Refresh' content='1; URL=page_99.php'></head></html>");
+	}
+	else
+	{	
+		
+		$result=mysql_query ("UPDATE $from SET $per='$red' WHERE $id='$rednum'")  or die(mysql_error());
+		if(!mysql_num_rows($result))
+		{ 
+		echo "«апись успешно изменена.<br><a href='page_99.php'>¬ернутьс¤ назад</a>";
+		}
+
+	}
+}	
+           			
 ?>

@@ -1,7 +1,6 @@
 <?php
 
 include ("bd.php");
-
 ?>
  
  <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -78,7 +77,7 @@ if (isset($_POST['bks']))
 { 
 	$tbl='books';
 	$clmn='title';
-	$th='название';
+	$th='Название';
 	
 	
 	$result = mysql_query("SELECT * FROM $tbl ") or die(mysql_error());
@@ -115,7 +114,7 @@ echo "</center>";
 
   <a href="#">Управление списком</a>
 
- <div class="hide">
+ <div class="hide" style="margin:10px auto ;">
 
 <form action="contspisok.php" method="post">
  Выберите список
@@ -147,18 +146,34 @@ echo "</center>";
 <input type="submit" name="submit"  value="Подтвердить">
 </p></form>
 
-
- 
   </div>
-
 </div>
 
 
 
 
-</center>
 
- 
+<div class="view-source">
+  <a  href="#">Поиск</a>
+ <div class="hide" style="margin:10px auto ;" >
+
+
+<form name="search" method="post" action="search.php">
+ Выберите список
+<select name="spisok" required>
+<option></option>
+  <option value="1">Авторы</option>
+  <option value="2">Книги</option>
+</select>
+ <p>
+    <input type="search" name="query" placeholder="Поиск">
+    <button type="submit">Найти</button> 
+ </p>	
+</form>
+
+
+   </div>
+</div>
 
 <script>
 
