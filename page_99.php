@@ -32,18 +32,24 @@ include ("bd.php");
 <div align="center" style="to" >
 <form action="" method="POST" style="margin:0;padding:0">
 <button type="submit" name="aut" value="aut">Авторы</button>
+<button type="submit" name="bks" value="bks">Книги</button>
 
 </form>
 </div>
 
 <?php 
 if (isset($_POST['aut']))
-{ //переменная=1;
-	$result = mysql_query("SELECT * FROM authors ") or die(mysql_error());
+{ 
+	$tbl='authors';
+	$clmn='name';
+	$th='ФИО';
+	
+	
+	$result = mysql_query("SELECT * FROM $tbl ") or die(mysql_error());
 	if(!mysql_num_rows($result))
-	{
-		exit ("<br><center><font size='4' color='red'>Недопустимая сумма вклада.</font></center>
-					<html><head><meta http-equiv='Refresh' content='1; URL=vivod.php'></head></html>");
+	{ //чек если табл пуста
+		exit ("<br><center><font size='4' color='red'>В таблице нет строк.</font></center>
+					<html><head><meta http-equiv='Refresh' content='1; URL=page_99.php'></head></html>");
 	}
 	else
 	{
@@ -51,14 +57,49 @@ echo "<center>";
  echo "<table class='simple-little-table'  style=' border-spacing: 20px 11px;'>";
   echo "<tr>";
 		echo "<th align=center>Номер</th>";
-        echo "<th align=center>ФИО</th>";
+        echo "<th align=center>$th</th>";
   echo "</tr>";
 
 while ($row = mysql_fetch_array($result))
 { 
   echo "<tr>";
-		echo "<td align='center'>".$row['id']."</td>";
-        echo "<td align='left'>".$row['name']."</td>";
+		echo "<td align='center'>".$row['id_aut']."</td>";
+        echo "<td align='left'>".$row[$clmn]."</td>";
+        echo "<td align='left'>".$pr."</td>";
+  echo "</tr>";
+} 
+ echo "</table>";
+echo "</center>";
+	}
+}
+
+if (isset($_POST['bks']))
+{ 
+	$tbl='books';
+	$clmn='title';
+	$th='Название';
+	
+	
+	$result = mysql_query("SELECT * FROM $tbl ") or die(mysql_error());
+	if(!mysql_num_rows($result))
+	{ //чек если табл пуста
+		exit ("<br><center><font size='4' color='red'>В таблице нет строк.</font></center>
+					<html><head><meta http-equiv='Refresh' content='1; URL=page_99.php'></head></html>");
+	}
+	else
+	{
+echo "<center>";
+ echo "<table class='simple-little-table'  style=' border-spacing: 20px 11px;'>";
+  echo "<tr>";
+		echo "<th align=center>Номер</th>";
+        echo "<th align=center>$th</th>";
+  echo "</tr>";
+
+while ($row = mysql_fetch_array($result))
+{ 
+  echo "<tr>";
+		echo "<td align='center'>".$row['id_bks']."</td>";
+        echo "<td align='left'>".$row[$clmn]."</td>";
         echo "<td align='left'>".$pr."</td>";
   echo "</tr>";
 } 
@@ -73,44 +114,27 @@ echo "</center>";
 
   <a href="#">Управление списком</a>
 
- <div class="hide">
+ <div class="hide" style="margin:10px auto ;">
 
-<form action="" method="post">
+<form action="contspisok.php" method="post">
  Выберите список
 <select name="spisok" required>
 <option></option>
   <option value="1">Авторы</option>
-  <option value="2">Меню</option>
+  <option value="2">Книги</option>
 </select>
 
-<?php 
-$from=0;
-if (value==1)
-{
-	$from='authors';
-	$addper='name';
-	$redper='name';
-	
-}
-else
-{
-	$from='books';
-	$addper='title';
-	$redper='name';
-}
-
-?> 
 
 
 <p>
 	<label>Добавить запись:<br></label>
-    <input name="addname" value="" type="text" placeholder="ФИО/Название"  		size="15" maxlength="15">
+    <input name="add"  type="text" placeholder="ФИО/Название"  		size="15" maxlength="15">
 </p>
 
 <p>	
 	<label>Редактировать запись:<br></label>
 	<input name="rednum" type="number" placeholder="Номер" 		size="15" maxlength="15">
-    <input name="redname" type="text" 	placeholder="ФИО/Название" 	size="15" maxlength="15">
+    <input name="red"	type="text" 	placeholder="ФИО/Название" 	size="15" maxlength="15">
 </p>
 
 <p>	
@@ -119,18 +143,37 @@ else
 </p>
 
 <p>
-<input type="submit" name="submit" class="enableOnInput"  value="Подтвердить">
+<input type="submit" name="submit"  value="Подтвердить">
 </p></form>
 
-
- 
   </div>
-
 </div>
 
-</center>
 
- 
+
+
+
+<div class="view-source">
+  <a  href="#">Поиск</a>
+ <div class="hide" style="margin:10px auto ;" >
+
+
+<form name="search" method="post" action="search.php">
+ Выберите список
+<select name="spisok" required>
+<option></option>
+  <option value="1">Авторы</option>
+  <option value="2">Книги</option>
+</select>
+ <p>
+    <input type="search" name="query" placeholder="Поиск">
+    <button type="submit">Найти</button> 
+ </p>	
+</form>
+
+
+   </div>
+</div>
 
 <script>
 
