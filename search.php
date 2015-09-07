@@ -44,19 +44,20 @@ function search ($query)
 				$row = mysql_fetch_assoc($result);
 			
 				$q = "SELECT *
-                  FROM books WHERE id_bks IN (SELECT id_bks FROM aut_bks WHERE id_aut = '$row[id_aut]') ORDER BY title";
+                  FROM books WHERE id_bks IN (SELECT id_bks FROM aut_bks WHERE id_aut = $row[id_aut]) ORDER BY title";
+				  $result2 = mysql_query($q) ;
+				  $row2 = mysql_fetch_assoc($result2); 
 				  
+                
 				  
 				  
 				
-				$result = mysql_query($a);
 
 				if (mysql_affected_rows() > 0) 
 				{ 
-                
-				$result2 = mysql_query($q) ;
-				$row2 = mysql_fetch_assoc($result2); 
-                $num = mysql_num_rows($result);
+                 
+				$num = mysql_num_rows($result);
+				
 
                 $text = '<p>По запросу <b>'.$query.'</b> найдено совпадений: '.$num.'</p>';
 			
@@ -65,7 +66,7 @@ function search ($query)
 						
 						$text .= ' '.$row['name'].' &nbsp; '.$row2['title'].' <br> '; 
 
-					} while ( ($row = mysql_fetch_assoc($result)) and ($row2 = mysql_fetch_assoc($result2)) ); 
+					} while ( ($row2 = mysql_fetch_assoc($result2)) ); 
 				} 
 				else 
 				{
@@ -82,8 +83,7 @@ function search ($query)
 				$result = mysql_query($a);
 				$row = mysql_fetch_assoc($result);
 			
-				$q = "SELECT name
-                  FROM authors WHERE id_aut IN (SELECT id_aut FROM aut_bks WHERE id_bks = $row[id_bks])";
+				
 				  
 				  
 				  
@@ -93,17 +93,19 @@ function search ($query)
 				{ 
                  
                 $num = mysql_num_rows($result);
-				$result2 = mysql_query($q) ;
-				$row2 = mysql_fetch_assoc($result2);
+				
 				
                 $text = '<p>По запросу <b>'.$query.'</b> найдено совпадений: '.$num.'</p>';
-			$result2 = mysql_query($q);
+			
 					do 
-					{
+					{	$q = "SELECT name
+                  FROM authors WHERE id_aut IN (SELECT id_aut FROM aut_bks WHERE id_bks = $row[id_bks])";
+						$result2 = mysql_query($q) ;
+						$row2 = mysql_fetch_assoc($result2);
 						
 						$text .= ' '.$row2['name'].' &nbsp; '.$row['title'].' <br> '; 
 
-					} while ( ($row = mysql_fetch_assoc($result)) and ($row2 = mysql_fetch_assoc($result2)) ); 
+					} while ( ($row = mysql_fetch_assoc($result)) ); 
 				} 
 				else 
 				{
