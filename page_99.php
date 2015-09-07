@@ -1,0 +1,213 @@
+<?php
+session_start();
+include ("bd.php");
+?>
+ 
+ <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML> 
+ <HEAD> 
+ <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+ <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+ <link rel="stylesheet" type="text/css" />
+ <TITLE></TITLE> 
+ <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed&subset=cyrillic,latin' rel='stylesheet' type='text/css'>
+ <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+ <style type="text/css">
+     body {background-color:#123456;}
+  html,body,input{font-family: 'Roboto Condensed', sans-serif;font-size:18px;}
+  p.text{font-family: 'Roboto Condensed', sans-serif; font-size:20px;;}
+  input{font-family: 'Roboto Condensed', sans-serif;font-size:14px;}
+  
+
+   a { 
+    text-decoration: none; /* Отменяем подчеркивание у ссылки */
+   }
+</style> 
+
+
+</HEAD> 
+<BODY>
+
+<div align="center" style="to" >
+<form action="" method="POST" style="margin:0;padding:0">
+<button type="submit" class="btn btn-large btn-primary" name="aut" value="aut">Авторы</button>
+<button type="submit" class="btn btn-large btn-primary" name="bks" value="bks">Книги</button>
+
+</form>
+</div>
+
+<?php 
+if (isset($_POST['aut']))
+{ 
+	$tbl='authors';
+	$clmn='name';
+	$th='ФИО';
+	
+	
+	$result = mysql_query("SELECT * FROM $tbl ") or die(mysql_error());
+	if(!mysql_num_rows($result))
+	{ //чек если табл пуста
+		exit ("<br><center><font size='4' color='red'>В таблице нет строк.</font></center>
+					<html><head><meta http-equiv='Refresh' content='1; URL=page_99.php'></head></html>");
+	}
+	else
+	{
+echo "<br>";
+echo "<center>";
+ echo "<table class='simple-little-table'  style=' border-spacing: 20px 11px;'>";
+  echo "<tr>";
+		echo "<th align=center>Номер</th>";
+        echo "<th align=center>$th</th>";
+  echo "</tr>";
+
+while ($row = mysql_fetch_array($result))
+{ 
+  echo "<tr>";
+		echo "<td align='center'>".$row['id_aut']."</td>";
+        echo "<td align='left'>".$row[$clmn]."</td>";
+        echo "<td align='left'>".$pr."</td>";
+  echo "</tr>";
+} 
+ echo "</table>";
+echo "</center>";
+	}
+}
+
+if (isset($_POST['bks']))
+{ 
+	$tbl='books';
+	$clmn='title';
+	$th='Название';
+	
+	
+	$result = mysql_query("SELECT * FROM $tbl ") or die(mysql_error());
+	if(!mysql_num_rows($result))
+	{ //чек если табл пуста
+		exit ("<br><center><font size='4' color='red'>В таблице нет строк.</font></center>
+					<html><head><meta http-equiv='Refresh' content='1; URL=page_99.php'></head></html>");
+	}
+	else
+	{
+echo "<br>";
+echo "<center>";
+ echo "<table class='simple-little-table'  style=' border-spacing: 20px 11px;'>";
+  echo "<tr>";
+		echo "<th align=center>Номер</th>";
+        echo "<th align=center>$th</th>";
+  echo "</tr>";
+
+while ($row = mysql_fetch_array($result))
+{ 
+  echo "<tr>";
+		echo "<td align='center'>".$row['id_bks']."</td>";
+        echo "<td align='left'>".$row[$clmn]."</td>";
+        echo "<td align='left'>".$pr."</td>";
+  echo "</tr>";
+} 
+ echo "</table>";
+echo "</center>";
+	}
+}	
+?>
+
+<div  style="position: absolute; top: 100px; left: 24px">
+<div class="view-source">
+
+  <a href="#">Управление списком</a>
+
+ <div class="hide" style="margin:10px auto ;">
+
+<form action="contspisok.php" method="post">
+ Выберите список&nbsp;
+<select name="spisok" required>
+<option></option>
+  <option value="1">Авторы</option>
+  <option value="2">Книги</option>
+</select>
+
+<br><br>
+
+<p>
+	Добавить запись:<br>
+    <input name="add"  type="text" placeholder="ФИО/Название"  		size="15" maxlength="15">
+</p>
+
+<p>	
+	Редактировать запись:<br>
+	<input name="rednum" type="number" placeholder="Номер" 		size="15" maxlength="15">&nbsp;
+    <input name="red"	type="text" 	placeholder="ФИО/Название" 	size="15" maxlength="15">
+</p>
+
+<p>	
+	Удалить запись:<br>
+    <input name="delnum" type="number" placeholder="Номер" 		size="15" maxlength="15">
+</p>
+
+<p>
+<input type="submit" class="btn btn-large btn-primary" name="submit"  value="Подтвердить">
+</p></form>
+
+  </div>
+</div>
+
+
+
+<br>
+
+<div class="view-source">
+  <a  href="#">Поиск</a>
+ <div class="hide" style="margin:10px auto ;" >
+
+
+<form name="search" method="post" action="search.php">
+ Выберите список&nbsp;
+<select name="spisok" required>
+<option></option>
+  <option value="1">Авторы</option>
+  <option value="2">Книги</option>
+</select>
+ <p>
+    <input type="search" name="query" placeholder="Поиск от 3 символов">&nbsp;
+    <button type="submit" class="btn btn-large btn-primary">Найти</button> 
+ </p>	
+</form>
+
+   </div>
+</div>
+</div>
+<script>
+
+$(function(){
+
+    $('.view-source .hide').hide();
+
+    $a = $('.view-source a');
+
+    $a.on('click', function(event) {
+
+      event.preventDefault();
+
+      $a.not(this).next().slideUp(500);
+
+      $(this).next().slideToggle(500);
+
+    });
+
+});
+
+</script>
+
+ </Body> 
+</HTML> 
+
+
+
+
+
+
+</div>
+</p>
+</div>

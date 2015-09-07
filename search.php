@@ -1,9 +1,9 @@
 ﻿<?php 
 define('DB_HOST', 'localhost');
-define('DB_USER', 'andrew');
-define('DB_PASS', '123');
-define('DB_NAME', 'ebibl');
-
+define('DB_USER', 't90847r4_ebibl');
+define('DB_PASS', '123456');
+define('DB_NAME', 't90847r4_ebibl');
+ error_reporting( E_ERROR ); 
 if (!mysql_connect(DB_HOST, DB_USER, DB_PASS)) 
 {
     exit('Cannot connect to server');
@@ -50,12 +50,10 @@ function search ($query)
 				  
                 
 				  
-				  
-				
 
 				if (mysql_affected_rows() > 0) 
 				{ 
-                 
+              
 				$num = mysql_num_rows($result);
 				
 
@@ -84,10 +82,6 @@ function search ($query)
 				$row = mysql_fetch_assoc($result);
 			
 				
-				  
-				  
-				  
-				
 
 				if (mysql_affected_rows() > 0) 
 				{ 
@@ -95,7 +89,7 @@ function search ($query)
                 $num = mysql_num_rows($result);
 				
 				
-                $text = '<p>По запросу <b>'.$query.'</b> найдено совпадений: '.$num.'</p>';
+                $text = '<p>По запросу <b>'.$query.'</b></font> найдено совпадений: '.$num.'</p>';
 			
 					do 
 					{	$q = "SELECT name
@@ -128,9 +122,27 @@ function search ($query)
 
 ?>
 
-<?php 
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed&subset=cyrillic,latin' rel='stylesheet' type='text/css'>
+ <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+	<style type="text/css">
+
+  body {background-color:#123456;
+  font-size:17px;}
+  </style>
+
+</head>
+<body>
+<div style="position: absolute; top: 100px; left: 104px">
+<?php
+
 if (!empty($_POST['query'])) { 
     $search_result = search ($_POST['query']); 
-    echo $search_result; 
+    echo "$search_result <br><a href='page_99.php'>Вернуться назад</a>"; 
 }
 ?>
+</div>
+</body>
+</html>
